@@ -1,0 +1,103 @@
+Online Retail II – Analysis Log
+Author: Cohens Pierre
+
+2025-11-30
+Downloaded Online Retail II dataset from UCI Machine Learning Repository.
+Saved main transactions sheet as UTF-8 CSV in folder data_raw.
+
+2025-12-01
+Created PostgreSQL database online_retail.
+Ran sql/01_create_tables.sql to create tables: raw_orders, clean_orders, returns_orders, order_level, customer_metrics, product_metrics.
+Imported online_retail_II_utf8.csv into raw_orders through pgAdmin.
+
+2025-12-02
+Ran initial profiling queries on raw_orders to review ranges for quantity, unit_price, invoice_date_raw, customer_id, and country.
+Confirmed presence of negative quantities for returns and some non-numeric values in numeric columns.
+
+2025-12-03
+Ran sql/02_cleaning.sql to populate clean_orders and returns_orders.
+Steps in script:
+– Cast quantity, unit_price, customer_id to numeric types.
+– Parsed invoice_date_raw into invoice_ts (timestamp) and invoice_date (date).
+– Derived invoice_month and invoice_quarter.
+– Computed line_revenue as quantity * unit_price.
+Verified:
+– clean_orders holds only positive quantity rows.
+– returns_orders holds only negative quantity rows.
+
+2025-12-03
+Built aggregated tables through sql/02_cleaning.sql:
+– order_level: one row per invoice with order_revenue, customer_id, country, invoice_date.
+– customer_metrics: one row per customer with total_revenue, order_count, first_order_date, last_order_date.
+– product_metrics: one row per product with units_sold, total_revenue, avg_line_revenue.
+
+2025-12-04
+Created sql/03_analysis_queries.sql to group analysis by question Q1–Q8.
+
+Q1 – Revenue by period
+Ran queries for monthly and quarterly revenue based on clean_orders.
+Exported results to:
+– data_clean/monthly_revenue.csv
+– data_clean/quarterly_revenue.csv
+
+Q2 – Customer value and deciles
+Ran queries on customer_metrics to:
+– rank customers by total_revenue
+– compute revenue share by decile
+Used results for customer concentration metrics in findings.
+
+Q3 – Product performance
+Ran queries on product_metrics to rank products by total_revenue and units_sold.
+Exported top revenue products to:
+– data_clean/top_products_revenue.csv
+
+Q4 – Country performance
+Ran queries on order_level to compute order_count, total_revenue, and avg_order_value by country.
+Exported results to:
+– data_clean/countries_revenue.csv
+
+Q5 – Order value and bands
+Ran queries on order_level to compute global average order_revenue, median, and range.
+Defined three order value bands: low (< 50), mid (50 to < 150), high (≥ 150).
+Summarised order_count and total_revenue by band.
+
+Q6 – New vs repeat customers
+Joined order_level with customer_metrics to label each order as first or repeat based on first_order_date.
+Computed revenue share, order_count, and avg_order_value for first vs repeat orders.
+Exported summary to:
+– data_clean/new_vs_repeat_orders.csv
+
+Q7 – Returns and net revenue
+Computed:
+– gross_revenue from clean_orders
+– returns_value from returns_orders
+– net_revenue and returns_rate (returns_value / gross_revenue)
+Joined product_metrics with returns_orders to find products with highest returns_value and returns_rate.
+Exported product level results to:
+– data_clean/returns_by_products.csv
+Ran similar query by country and exported to:
+– data_clean/returns_by_country.csv
+
+Q8 – Customer spend tiers
+Ranked customers by total_revenue with NTILE(3) to assign low, mid, and high spend tiers.
+Summarised customer_count, tier_revenue, revenue_share, and total_orders by tier.
+Exported tier summary to:
+– data_clean/customer_spend_tiers.csv
+
+2025-12-05
+Connected data_clean CSV files to Power BI Desktop.
+Set data types for dates, numeric fields, and percentage fields (revenue_share, returns_rate).
+Built measures for:
+– Total Revenue
+– Net Revenue
+– Returns Rate
+– Average Order Value
+– Total Customers
+
+Created dashboard visuals:
+– Column chart: revenue by quarter.
+– Bar chart: revenue by country.
+– Bar chart: products with highest returns rate.
+– Line chart: revenue by month.
+– Bar chart: top products by revenue.
+– Column chart: average order value by country.

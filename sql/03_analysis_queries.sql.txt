@@ -1,0 +1,10 @@
+[2025-12-02] Downloaded Online Retail II and placed online_retail_II.csv in data_raw.
+[2025-12-02] Created PostgreSQL database online_retail in pgAdmin
+[2025-12-02] Created base tables in PostgreSQL from 01_create_tables.sql (RAW_ORDERS, CLEAN_ORDERS, RETURNS_ORDERS, ORDER_LEVEL, CUSTOMER_METRICS, PRODUCT_METRICS).
+[2025-12-02] Imported online_retail_II_utf8.csv into RAW_ORDERS, row count = 541909.
+[2025-12-02] RAW_ORDERS rows = ...
+[2025-12-02] CLEAN_ORDERS rows = 531285
+[2025-12-02] RETURNS_ORDERS rows = 10624
+[2025-12-02] ORDER_LEVEL rows = 20728
+[2025-12-02] CUSTOMER_METRICS rows = 4339
+[2025-12-02] PRODUCT_METRICS rows = 3941
