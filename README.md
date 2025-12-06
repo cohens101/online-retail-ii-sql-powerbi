@@ -58,28 +58,6 @@ Key insights in one line:
 
   * Screenshots of key query outputs
 
-## How to run the SQL
-
-1. Create a PostgreSQL database named `online_retail`.
-2. Run `sql/01_create_tables.sql` to create base and aggregate tables.
-3. Load the Online Retail II CSV into `raw_orders`.
-4. Run `sql/02_cleaning.sql` to build `clean_orders`, `returns_orders`, `order_level`, `customer_metrics`, and `product_metrics`.
-5. Run `sql/03_analysis_queries.sql` to generate result sets for the dashboard and key findings.
-
-## How to view the dashboard
-
-1. Open Power BI Desktop.
-2. Load the CSV files from `data_clean/`.
-3. Rebuild visuals based on the field names, or open the `.pbix` file if it is included in the repo.
-4. Main visuals:
-
-   * Revenue by quarter
-   * Revenue by country
-   * Products with highest returns rate
-   * Revenue by month
-   * Top products by revenue
-   * Average order value by country
-
 ## Why this project matters
 
 This project shows end to end work:
